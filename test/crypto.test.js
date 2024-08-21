@@ -9,8 +9,8 @@ describe("aescrypto", () => {
       medication: "Aspirin",
     };
     const secretKey = "ThisIsAVerySecretKey";
-    const encryptedData = await encryptData(data, secretKey);
+    const encryptedData = await encryptData(JSON.stringify(data), secretKey);
     const decryptedData = await decryptData(encryptedData, secretKey);
-    expect(decryptedData).toEqual(data);
+    expect(JSON.parse(decryptedData)).toEqual(data);
   });
 });
