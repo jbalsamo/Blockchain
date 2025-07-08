@@ -1,106 +1,88 @@
-const crypto = require("crypto");
-const { createHmac } = require("node:crypto");
+import crypto from 'crypto';
 
-const algorithm = "aes-192-cbc";
-const password = "2001MyForever";
-const salt = "salt";
-const keysize = 24;
-const iv = Buffer.alloc(16, 0);
+const algorithm = "aes-256-cbc";
+const keysize = 32; // 256 bits key for AES-256
 
-const encryptData = async (data, password) => {
-  let encrypted = "";
-  let retval;
-  await crypto.scrypt(password, salt, keysize, async (err, key) => {
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-
-    cipher.setEncoding("hex");
-
-    cipher.on("data", (chunk) => (encrypted += chunk));
-    cipher.on("end", () => console.log("encrypting...")); // Prints encrypted data with key
-
-    cipher.write(data);
-    cipher.end();
-    retval = encrypted;
-  });
-  return retval;
+/**
+ * Generates a random initialization vector
+ * @returns {Buffer} A 16-byte Buffer containing random data for IV
+ */
+const generateIV = () => {
+  return crypto.randomBytes(16);
 };
 
-const decryptData = async (encrypted, password) => {
-  let decrypted = "";
-  let retval = "";
-  const key = await new Promise((resolve, reject) => {
+/**
+ * Derives a key from a password and salt using scrypt
+ * @param {string} password - Password to derive key from
+ * @param {string} salt - Salt to use in key derivation
+ * @returns {Promise<Buffer>} The derived key
+ */
+const deriveKey = async (password, salt) => {
+  return new Promise((resolve, reject) => {
     crypto.scrypt(password, salt, keysize, (err, key) => {
       if (err) reject(err);
       else resolve(key);
     });
   });
-
-  const decipher = crypto.createDecipheriv(algorithm, key, iv);
-  decipher.on("readable", (chunk) => {
-    while (null !== (chunk = decipher.read())) {
-      decrypted += chunk.toString("utf8");
-    }
-  });
-  decipher.on("end", () => {
-    console.log("decrypting...");
-    retval = decrypted;
-  });
-  decipher.write(encrypted, "hex");
-  decipher.end();
-
-  await new Promise((resolve) => {
-    decipher.on("end", () => {
-      resolve();
-    });
-  });
-
-  console.log(decrypted ? decrypted : "Return failed");
-  return retval;
 };
 
-// let data = "The quick brown fox jumps over the lazy dog.";
-// let encryptedData = await encryptData(data, password);
-// console.log("Encrypted: ", encryptedData);
-// let decryptedData = await decryptData(encryptedData, password);
-// console.log("Decrypted: ", decryptedData);
+/**
+ * Encrypts data using AES-256-CBC with a derived key
+ * @param {string} data - Data to encrypt
+ * @param {string} password - Password to derive key from
+ * @param {string} salt - Salt to use in key derivation (should be stored with the encrypted data)
+ * @returns {Promise<Object>} Object containing encrypted data, iv, and salt
+ */
+const encryptData = async (data, password, salt = crypto.randomBytes(16).toString('hex')) => {
+  try {
+    const key = await deriveKey(password, salt);
+    const iv = generateIV();
+    
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    
+    let encrypted = cipher.update(data, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    
+    return {
+      encrypted,
+      iv: iv.toString('hex'),
+      salt
+    };
+  } catch (error) {
+    console.error('Encryption error:', error.message);
+    throw error;
+  }
+};
 
-// We will first generate the key, as it is dependent on the algorithm.
-// In this case for aes192, the key is 24 bytes (192 bits).
-// crypto.scrypt(password, salt, keysize, (err, key) => {
-//   if (err) throw err;
-//   // After that, we will generate a random iv (initialization vector)
-//   crypto.randomFill(new Uint8Array(16), (err, iv) => {
-//     if (err) throw err;
+/**
+ * Decrypts data using AES-256-CBC with a derived key
+ * @param {Object} encryptedData - Object containing encrypted data, iv, and salt
+ * @param {string} encryptedData.encrypted - Encrypted data in hex format
+ * @param {string} encryptedData.iv - Initialization vector in hex format
+ * @param {string} encryptedData.salt - Salt used for key derivation
+ * @param {string} password - Password to derive key from
+ * @returns {Promise<string>} Decrypted data
+ */
+const decryptData = async (encryptedData, password) => {
+  try {
+    const { encrypted, iv, salt } = encryptedData;
+    
+    const key = await deriveKey(password, salt);
+    const decipher = crypto.createDecipheriv(
+      algorithm, 
+      key, 
+      Buffer.from(iv, 'hex')
+    );
+    
+    let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    
+    return decrypted;
+  } catch (error) {
+    console.error('Decryption error:', error.message);
+    throw error;
+  }
+};
 
-//     // Create Cipher with key and iv
-//     const cipher = crypto.createCipheriv(algorithm, key, iv);
+export { encryptData, decryptData, deriveKey, generateIV };
 
-//     let encrypted = "";
-//     cipher.setEncoding("hex");
-
-//     cipher.on("data", (chunk) => (encrypted += chunk));
-//     cipher.on("end", () => console.log(encrypted)); // Prints encrypted data with key
-
-//     cipher.write("The quick brown fox jumps over the lazy dog.");
-//     cipher.end();
-
-//     const decipher = crypto.createDecipheriv(algorithm, key, iv);
-
-//     let decrypted = "";
-//     decipher.on("readable", () => {
-//       while (null !== (chunk = decipher.read())) {
-//         decrypted += chunk.toString("utf8");
-//       }
-//     });
-//     decipher.on("end", () => {
-//       console.log(decrypted);
-//       // Prints: some clear text data
-//     });
-
-//     // Encrypted with same algorithm, key and iv.
-//     decipher.write(encrypted, "hex");
-//     decipher.end();
-//   });
-// });
-
-module.exports = { encryptData, decryptData };

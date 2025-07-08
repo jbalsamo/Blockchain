@@ -1,0 +1,82 @@
+[
+  {
+    "index": 0,
+    "timestamp": 1751989461173,
+    "data": {
+      "transactions": [],
+      "note": "Genesis block"
+    },
+    "previousHash": "0",
+    "hash": "9fa3892cbfa93091c5a581a760a486d076f11890ab9d822ef6f9aae98c5ac8af",
+    "nonce": 0,
+    "merkleRoot": null
+  },
+  {
+    "index": 1,
+    "timestamp": 1751989461440,
+    "data": [],
+    "previousHash": "9fa3892cbfa93091c5a581a760a486d076f11890ab9d822ef6f9aae98c5ac8af",
+    "hash": "0000bd22c3810a41176ea19d1b101b8f5ad97297897b3554ef636810648fdc11",
+    "nonce": 43279,
+    "merkleRoot": null
+  },
+  {
+    "index": 2,
+    "timestamp": 1751989461468,
+    "data": [
+      {
+        "fromAddress": null,
+        "toAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "amount": 100
+      }
+    ],
+    "previousHash": "0000bd22c3810a41176ea19d1b101b8f5ad97297897b3554ef636810648fdc11",
+    "hash": "0000991814ccec379cfcc89ba82ac3560b3d7609c9a60c6ae68e279d336b45f2",
+    "nonce": 48992,
+    "merkleRoot": "c00df4d6dd3f736cb63f2412f559e90d2db5c5cb88ca69655d9f16caf2967013"
+  },
+  {
+    "index": 3,
+    "timestamp": 1751989461505,
+    "data": [
+      {
+        "fromAddress": null,
+        "toAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "amount": 100
+      },
+      {
+        "fromAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "toAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "amount": 50,
+        "timestamp": 1751989461505,
+        "signature": "5ba7c97bffb4241bfde1dcf70649ab7e202d071b833384c72efbafe15cf49ddf8016e6c128ea39e548efd5e94d7a2fbe3080547a22da0b1988c57474408b572a94d995bde43e68440bf29dddce8cbc664a049fc589ff4bbd101dc78ee0f4294c654cabe65c5120aefc86179df63e186faa298db0d141a66148a3709ea35442f301157bcab4a237672b52b35d5141b9dccbe22aea280f1edeb5bc3d1373b5adaa8d1e9ce430decaaaf8f534ed6ee396537b82a07cea1ff8307ad6e632300a0b86975d09d9f2f530030cbfb6c4e76391bb49c1c90f229abd776e54a06f2d4d714c5831b79a8da8b2906b6aa4384c8b1bf1f6a69b473612e84ce4b5616f5ee02414"
+      }
+    ],
+    "previousHash": "0000991814ccec379cfcc89ba82ac3560b3d7609c9a60c6ae68e279d336b45f2",
+    "hash": "000007efbe26b800cd313659e4038b0e4b7a3adcd944743cd9e1c6b68c707eb1",
+    "nonce": 79224,
+    "merkleRoot": "4d7f43012674dbcb6d1c1835d74f2eac92db7ce776aead1847717b920e71cc44"
+  },
+  {
+    "index": 4,
+    "timestamp": 1751989461664,
+    "data": [
+      {
+        "fromAddress": null,
+        "toAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "amount": 100
+      },
+      {
+        "fromAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "toAddress": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4",
+        "amount": 25,
+        "timestamp": 1751989461664,
+        "signature": "c0fed898907baefdae83d39fabed2ab0a37aee50d0f24053e0714b9375aaa8d484bf18d782b28ac01510ebe209e4524d81c76df7811881ad10f7dd4ee5c6af5fa3c1735ca8db6d60ffee54f0e14532022fe3b5514e937164f79aa4de980fbde740d37ce470c746651eb2d024f65b80ee1e057eca80c61435c3d8dc42f6278092a3dabd122a0aa50d2e90ff5181a1a0905f7cfebecd37c1f975a9c293b62b98ecfd15a0fb56dfd56f7a07194030278684e4b40087f04ccaedbd1182b5c22c849730ebd306aca21da4969b69d2985ae5c6a0e4bf3d6cb7ff3a4e17c85d5a471d2838aa7fa79717a951369d37c42709b8191cc6c59dc97271e380cb2db520a9b419"
+      }
+    ],
+    "previousHash": "000007efbe26b800cd313659e4038b0e4b7a3adcd944743cd9e1c6b68c707eb1",
+    "hash": "00009b73c588357dde69b5d1b8ef98bfae7d60884fcfef6f19fe71d2eb4cf936",
+    "nonce": 36696,
+    "merkleRoot": "a371d192463709eff99976d5ab7cf33fc70dac78903ea5c90132f4caf8b321a2"
+  }
+]
